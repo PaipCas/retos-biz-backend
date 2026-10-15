@@ -1,4 +1,4 @@
-package com.cesde.retosbiz.persistence.entity;
+package com.cesde.retosbiz.Model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,9 +7,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity 
+@Entity
 @Table(name = "categorias")
-public class CategoryEntity {
+public class CategoryModel {
 	@Id 
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
@@ -19,7 +19,7 @@ public class CategoryEntity {
 
 	@Column(length = 200)
 	private String descripcion;
-	
+
 	@Column(length = 100)
 	private String area_responsable;
 
