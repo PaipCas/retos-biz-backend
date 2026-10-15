@@ -9,5 +9,4 @@ public class RetosBizApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RetosBizApplication.class, args);
 	}
-
 }
