@@ -17,6 +17,7 @@ public interface CategoryMapper {
 	@Mapping(source = "descripcion", target = "description")
 	@Mapping(source = "area_responsable", target = "responsible_area")
 	CategoryDto toCategoryDto(CategoryModel categoryModel);
+
 	List<CategoryDto> toCategoryDto(Iterable<CategoryModel> categoryModels);
 
 	@InheritInverseConfiguration

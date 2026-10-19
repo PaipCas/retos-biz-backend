@@ -7,8 +7,16 @@ import com.cesde.retosbiz.Dto.UpdateCategoryDto;
 
 public interface CategoryRepository {
 	List<CategoryDto> getAllCategories();
+
 	CategoryDto getCategoryById(String id);
+
 	CategoryDto createCategory(CategoryDto categoryDto);
+
 	CategoryDto updateCategory(String id, UpdateCategoryDto updateCategoryDto);
+
 	void deleteCategory(String id);
+
+	boolean existsByName(String name);
+
+	boolean existsById(String id);
 }
