@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "categorias")
 public class CategoryModel {
-	@Id 
+	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
