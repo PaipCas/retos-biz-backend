@@ -1,11 +1,12 @@
 package com.cesde.retosbiz.Service;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.cesde.retosbiz.Model.ChallengeModel;
+import com.cesde.retosbiz.Dto.ChallengeDto;
+import com.cesde.retosbiz.Dto.UpdateChallengeDto;
 import com.cesde.retosbiz.Repository.ChallengeRepository;
 
 @Service
@@ -20,83 +21,93 @@ public class ChallengeService {
         this.challengeRepository = challengeRepository;
     }
 
-    // Consulta general
-    public List<ChallengeModel> getAll() throws Exception {
-        try {
-            return (List<ChallengeModel>) this.challengeRepository.findAll();
-        } catch (Exception error) {
-            throw new Exception(error.getMessage());
-        }
+    public List<ChallengeDto> getAll() {
+        return challengeRepository.getAll();
     }
 
-    // Consulta individual por llave primaria
-    public ChallengeModel getById(String id) throws Exception {
-        try {
-            Optional<ChallengeModel> retoEncontrado = this.challengeRepository.findById(id);
-            if (retoEncontrado.isPresent()) {
-                return retoEncontrado.get();
-            } else {
-                throw new Exception("Reto no encontrado");
-            }
-        } catch (Exception error) {
-            throw new Exception(error.getMessage());
+    public ChallengeDto getById(String id) throws Exception {
+        ChallengeDto challenge = challengeRepository.getById(id);
+        if (challenge == null) {
+            throw new Exception("Reto no encontrado");
         }
+        return challenge;
     }
 
-    // Consulta por estado
-    public List<ChallengeModel> getByEstado(String estado) throws Exception {
-        try {
-            return this.challengeRepository.findByEstado(estado);
-        } catch (Exception error) {
-            throw new Exception(error.getMessage());
-        }
+    public List<ChallengeDto> getByEstado(String estado) {
+        return challengeRepository.getByEstado(estado);
     }
 
-    // Crear un reto
-    public ChallengeModel create(ChallengeModel reto) throws Exception {
-        try {
-            validar(reto);
-            reto.setId(null);
-            return this.challengeRepository.save(reto);
-        } catch (Exception error) {
-            throw new Exception(error.getMessage());
-        }
+    public List<ChallengeDto> getByCompanyId(String companyId) {
+        return challengeRepository.getByCompanyId(companyId);
     }
 
-    // Actualizar un reto
-    public ChallengeModel update(String id, ChallengeModel reto) throws Exception {
-        try {
-            getById(id);
-            validar(reto);
-            reto.setId(id);
-            return this.challengeRepository.save(reto);
-        } catch (Exception error) {
-            throw new Exception(error.getMessage());
-        }
+    public ChallengeDto create(ChallengeDto challenge) throws Exception {
+        validate(challenge);
+        return challengeRepository.create(challenge);
     }
 
-    // Eliminar un reto
+    public ChallengeDto update(String id, UpdateChallengeDto challenge) throws Exception {
+        getById(id);
+        validate(challenge);
+        return challengeRepository.update(id, challenge);
+    }
+
     public void delete(String id) throws Exception {
-        try {
-            getById(id);
-            this.challengeRepository.deleteById(id);
-        } catch (Exception error) {
-            throw new Exception(error.getMessage());
-        }
+        getById(id);
+        challengeRepository.delete(id);
     }
 
-    // Reglas de negocio
-    private void validar(ChallengeModel reto) throws Exception {
-        if (reto.getNombre() == null || reto.getNombre().isBlank()) {
+    private void validate(ChallengeDto challenge) throws Exception {
+        if (challenge == null) {
+            throw new Exception("El reto es obligatorio");
+        }
+        validate(challenge.name(), challenge.description(), challenge.startDate(),
+                challenge.endDate(), challenge.status(), challenge.companyId(),
+                challenge.categoryId(), challenge.priorityId());
+    }
+
+    private void validate(UpdateChallengeDto challenge) throws Exception {
+        if (challenge == null) {
+            throw new Exception("El reto es obligatorio");
+        }
+        validate(challenge.name(), challenge.description(), challenge.startDate(),
+                challenge.endDate(), challenge.status(), challenge.companyId(),
+                challenge.categoryId(), challenge.priorityId());
+    }
+
+    private void validate(String name, String description, LocalDate startDate, LocalDate endDate,
+                          String status, String companyId, String categoryId, String priorityId)
+            throws Exception {
+        if (name == null || name.isBlank()) {
             throw new Exception("El nombre es obligatorio");
         }
-        if (reto.getFechaInicio() != null && reto.getFechaFin() != null
-                && reto.getFechaFin().isBefore(reto.getFechaInicio())) {
+        if (name.length() > 150) {
+            throw new Exception("El nombre no puede exceder los 150 caracteres");
+        }
+        if (description != null && description.length() > 500) {
+            throw new Exception("La descripción no puede exceder los 500 caracteres");
+        }
+        if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
             throw new Exception("La fecha fin no puede ser anterior a la fecha inicio");
         }
-        if (reto.getEstado() == null
-                || !ESTADOS.contains(reto.getEstado().trim().toLowerCase())) {
-            throw new Exception("Estado no válido. Use: En progreso, Completado, Pendiente o Cancelado");
+        if (status == null || !ESTADOS.contains(status.trim().toLowerCase())) {
+            throw new Exception(
+                    "Estado no válido. Use: En progreso, Completado, Pendiente o Cancelado");
+        }
+        if (status.length() > 50) {
+            throw new Exception("El estado no puede exceder los 50 caracteres");
+        }
+        validateRequiredId(companyId, "empresa");
+        validateRequiredId(categoryId, "categoría");
+        validateRequiredId(priorityId, "prioridad");
+    }
+
+    private void validateRequiredId(String id, String field) throws Exception {
+        if (id == null || id.isBlank()) {
+            throw new Exception("El ID de " + field + " es obligatorio");
+        }
+        if (id.length() > 50) {
+            throw new Exception("El ID de " + field + " no puede exceder los 50 caracteres");
         }
     }
 }
