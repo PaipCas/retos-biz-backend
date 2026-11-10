@@ -2,11 +2,15 @@ package com.cesde.retosbiz.Model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -34,38 +38,70 @@ public class ChallengeModel {
     @Column(name = "id_empresa", nullable = false, length = 50)
     private String idEmpresa;
 
-    @Column(name = "id_categoria", nullable = false, length = 50)
-    private String idCategoria;
+    @ManyToOne
+    @JoinColumn(name = "id_categoria")
+    @JsonBackReference
+    private CategoryModel categoria;
 
-    @Column(name = "id_prioridad", nullable = false, length = 50)
-    private String idPrioridad;
+    @ManyToOne
+    @JoinColumn(name = "id_prioridad")
+    @JsonBackReference
+    private PriorityModel prioridad;
 
     /// Getters and Setters
+    public String getId() {
+        return id;
+    }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public LocalDate getFechaInicio() { return fechaInicio; }
-    public void setFechaInicio(LocalDate fechaInicio) { this.fechaInicio = fechaInicio; }
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-    public LocalDate getFechaFin() { return fechaFin; }
-    public void setFechaFin(LocalDate fechaFin) { this.fechaFin = fechaFin; }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
+    }
 
-    public String getIdEmpresa() { return idEmpresa; }
-    public void setIdEmpresa(String idEmpresa) { this.idEmpresa = idEmpresa; }
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
 
-    public String getIdCategoria() { return idCategoria; }
-    public void setIdCategoria(String idCategoria) { this.idCategoria = idCategoria; }
+    public LocalDate getFechaFin() {
+        return fechaFin;
+    }
 
-    public String getIdPrioridad() { return idPrioridad; }
-    public void setIdPrioridad(String idPrioridad) { this.idPrioridad = idPrioridad; }
+    public void setFechaFin(LocalDate fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(String idEmpresa) {
+        this.idEmpresa = idEmpresa;
+    }
 }

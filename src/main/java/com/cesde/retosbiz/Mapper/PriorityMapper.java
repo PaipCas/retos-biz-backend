@@ -23,6 +23,7 @@ public interface PriorityMapper {
 	@InheritInverseConfiguration
 	PriorityModel toPriorityModel(PriorityDto priorityDto);
 
+	@Mapping(target = "id", ignore = true)
 	@Mapping(source = "name", target = "nombre")
 	@Mapping(source = "level", target = "nivel")
 	@Mapping(source = "max_response_days", target = "dias_max_respuesta")
