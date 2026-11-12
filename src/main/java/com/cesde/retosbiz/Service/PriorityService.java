@@ -18,15 +18,15 @@ public class PriorityService {
 		this.priorityRepository = priorityRepository;
 	}
 
-	public List<PriorityDto> getAllPriorities() {
+	public List<PriorityDto> getAllPriorities() throws Exception {
 		try {
 			return this.priorityRepository.getAllPriorities();
-		} catch (Exception e) {
-			throw new RuntimeException("Error al consultar las prioridades: ", e);
+		} catch (Exception error) {
+			throw new Exception(error.getMessage());
 		}
 	}
 
-	public PriorityDto getPriorityById(String id) {
+	public PriorityDto getPriorityById(String id) throws Exception {
 		try {
 			PriorityDto priorityDto = this.priorityRepository.getPriorityById(id);
 
@@ -35,60 +35,52 @@ public class PriorityService {
 			}
 
 			return priorityDto;
-		} catch (PriorityNotFoundException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new RuntimeException("Error al consultar la prioridad " + id, e);
+		} catch (Exception error) {
+			throw new Exception(error.getMessage());
 		}
 	}
 
-	public List<PriorityDto> getPrioritiesByLevel(Integer level) {
+	public List<PriorityDto> getPrioritiesByLevel(Integer level) throws Exception {
 		try {
 			return this.priorityRepository.getPrioritiesByLevel(level);
-		} catch (Exception e) {
-			throw new RuntimeException("Error al consultar las prioridades de nivel " + level, e);
+		} catch (Exception error) {
+			throw new Exception(error.getMessage());
 		}
 	}
 
-	public PriorityDto createPriority(PriorityDto priorityDto) {
+	public PriorityDto createPriority(PriorityDto priorityDto) throws Exception {
 		try {
 			if (this.priorityRepository.existsByName(priorityDto.name())) {
 				throw new PriorityAlreadyExistException(priorityDto.name());
 			}
 
 			return this.priorityRepository.createPriority(priorityDto);
-		} catch (PriorityAlreadyExistException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new RuntimeException("Error al crear la prioridad", e);
+		} catch (Exception error) {
+			throw new Exception(error.getMessage());
 		}
 	}
 
-	public PriorityDto updatePriority(String id, UpdatePriorityDto updatePriorityDto) {
+	public PriorityDto updatePriority(String id, UpdatePriorityDto updatePriorityDto) throws Exception {
 		try {
 			if (!this.priorityRepository.existsById(id)) {
 				throw new PriorityNotFoundException(id);
 			}
 
 			return this.priorityRepository.updatePriority(id, updatePriorityDto);
-		} catch (PriorityNotFoundException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new RuntimeException("Error al actualizar la prioridad " + id, e);
+		} catch (Exception error) {
+			throw new Exception(error.getMessage());
 		}
 	}
 
-	public void deletePriority(String id) {
+	public void deletePriority(String id) throws Exception {
 		try {
 			if (!this.priorityRepository.existsById(id)) {
 				throw new PriorityNotFoundException(id);
 			}
 
 			this.priorityRepository.deletePriority(id);
-		} catch (PriorityNotFoundException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new RuntimeException("Error al eliminar la prioridad " + id, e);
+		} catch (Exception error) {
+			throw new Exception(error.getMessage());
 		}
 	}
 }
