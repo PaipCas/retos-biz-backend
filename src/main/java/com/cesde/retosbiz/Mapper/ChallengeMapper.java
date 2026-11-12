@@ -38,5 +38,5 @@ public interface ChallengeMapper {
     @Mapping(source = "priorityId", target = "idPrioridad")
     @Mapping(target = "id", ignore = true)
     void updateChallengeModelFromDto(UpdateChallengeDto updateChallengeDto,
-                                     @MappingTarget ChallengeModel challengeModel);
+        @MappingTarget ChallengeModel challengeModel);
 }

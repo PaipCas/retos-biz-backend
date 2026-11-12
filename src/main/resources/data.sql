@@ -10,3 +10,9 @@ INSERT IGNORE INTO categorias (id, nombre, descripcion, area_responsable) VALUES
 (UUID(), 'Talento Humano', 'Retos sobre bienestar laboral, capacitación y cultura organizacional', 'Recursos Humanos'),
 (UUID(), 'Logística', 'Retos para mejorar la cadena de suministro, inventarios y distribución', 'Operaciones'),
 (UUID(), 'Servicio al Cliente', 'Retos para mejorar la atención, satisfacción y fidelización de clientes', 'Atención al Cliente');
+
+
+-- Datos iniciales para la tabla retos
+INSERT IGNORE INTO retos (id, nombre, descripcion, fecha_inicio, fecha_fin, estado, id_empresa, id_categoria, id_prioridad) VALUES
+(UUID(), 'Migración de Servidores a la Nube', 'Diseñar un plan para migrar la infraestructura local a AWS.', '2026-11-05', '2027-01-30', 'En progreso', (SELECT id FROM empresas LIMIT 1), (SELECT id FROM categorias WHERE nombre = 'Tecnología'), (SELECT id FROM prioridades LIMIT 1)),
+(UUID(), 'Campaña de Posicionamiento 2027', 'Crear una estrategia de marketing digital para redes sociales.', '2026-11-15', '2027-03-31', 'Pendiente', (SELECT id FROM empresas LIMIT 1), (SELECT id FROM categorias WHERE nombre = 'Marketing'), (SELECT id FROM prioridades LIMIT 1));
