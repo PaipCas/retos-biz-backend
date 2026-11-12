@@ -79,7 +79,8 @@ public class ChallengeService {
 
     // Lanza IllegalArgumentException (400) si algún dato no es válido
     private void validate(String name, String description, LocalDate startDate, LocalDate endDate,
-                        String status, String companyId) {
+                          String status, String companyId, String categoryId, String priorityId)
+            throws Exception {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("El nombre es obligatorio");
         }
