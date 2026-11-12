@@ -3,22 +3,23 @@ package com.cesde.retosbiz.Model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity 
+@Entity
 @Table(name = "empresas")
 public class CompanyModel {
-    
+
     @Id
-    @GeneratedValue
-    @Column(name = "id_empresa")
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id_empresa", length = 36)
     private String id;
 
     @Column(name = "nombre_empresa")
     private String name;
 
-    @Column(name = "nit_empresa")
+    @Column(name = "nit_empresa", nullable = false, unique = true)
     private String nit;
 
     @Column(name = "direccion_empresa")
@@ -27,11 +28,14 @@ public class CompanyModel {
     @Column(name = "telefono_empresa")
     private String phone;
 
+    @Column(name = "sector_empresa")
+    private String sector;
+
     // Getters and Setters
 
     public String getId() {
         return id;
-     }
+    }
 
     public void setId(String id) {
         this.id = id;
@@ -69,8 +73,12 @@ public class CompanyModel {
         this.phone = phone;
     }
 
+    public String getSector() {
+        return sector;
+    }
 
-    
-   
+    public void setSector(String sector) {
+        this.sector = sector;
+    }
 
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice 
+@RestControllerAdvice
 public class RestExceptionHandler {
 	// Categories
 	@ExceptionHandler(CategoryAlreadyExistException.class)
@@ -37,6 +37,21 @@ public class RestExceptionHandler {
 	@ExceptionHandler(PriorityNotFoundException.class)
 	public ResponseEntity<Error> handleException(PriorityNotFoundException ex) {
 		Error error = new Error("priority-not-found", ex.getMessage());
+
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+	}
+
+	// Companies
+	@ExceptionHandler(CompanyAlreadyExistException.class)
+	public ResponseEntity<Error> handleException(CompanyAlreadyExistException ex) {
+		Error error = new Error("company-already-exist", ex.getMessage());
+
+		return ResponseEntity.badRequest().body(error);
+	}
+
+	@ExceptionHandler(CompanyNotFoundException.class)
+	public ResponseEntity<Error> handleException(CompanyNotFoundException ex) {
+		Error error = new Error("company-not-found", ex.getMessage());
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
 	}
