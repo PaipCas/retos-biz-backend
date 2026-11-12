@@ -13,6 +13,20 @@ INSERT IGNORE INTO categorias (id, nombre, descripcion, area_responsable) VALUES
 
 
 -- Datos iniciales para la tabla retos
-INSERT IGNORE INTO retos (id, nombre, descripcion, fecha_inicio, fecha_fin, estado, id_empresa, id_categoria, id_prioridad) VALUES
-(UUID(), 'Migración de Servidores a la Nube', 'Diseñar un plan para migrar la infraestructura local a AWS.', '2026-11-05', '2027-01-30', 'En progreso', (SELECT id FROM empresas LIMIT 1), (SELECT id FROM categorias WHERE nombre = 'Tecnología'), (SELECT id FROM prioridades LIMIT 1)),
-(UUID(), 'Campaña de Posicionamiento 2027', 'Crear una estrategia de marketing digital para redes sociales.', '2026-11-15', '2027-03-31', 'Pendiente', (SELECT id FROM empresas LIMIT 1), (SELECT id FROM categorias WHERE nombre = 'Marketing'), (SELECT id FROM prioridades LIMIT 1));
+-- Cada reto se inserta solo si su nombre no existe (evita duplicados al reiniciar)
+-- y solo si ya hay al menos una empresa y una prioridad (id_empresa e id_prioridad son obligatorios).
+INSERT INTO retos (id, nombre, descripcion, fecha_inicio, fecha_fin, estado, id_empresa, id_categoria, id_prioridad)
+SELECT UUID(), 'Migración de Servidores a la Nube', 'Diseñar un plan para migrar la infraestructura local a AWS.', '2026-11-05', '2027-01-30', 'En progreso',
+       (SELECT id_empresa FROM empresas LIMIT 1), (SELECT id FROM categorias WHERE nombre = 'Tecnología'), (SELECT id FROM prioridades LIMIT 1)
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM retos WHERE nombre = 'Migración de Servidores a la Nube')
+  AND EXISTS (SELECT 1 FROM empresas)
+  AND EXISTS (SELECT 1 FROM prioridades);
+
+INSERT INTO retos (id, nombre, descripcion, fecha_inicio, fecha_fin, estado, id_empresa, id_categoria, id_prioridad)
+SELECT UUID(), 'Campaña de Posicionamiento 2027', 'Crear una estrategia de marketing digital para redes sociales.', '2026-11-15', '2027-03-31', 'Pendiente',
+       (SELECT id_empresa FROM empresas LIMIT 1), (SELECT id FROM categorias WHERE nombre = 'Marketing'), (SELECT id FROM prioridades LIMIT 1)
+FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM retos WHERE nombre = 'Campaña de Posicionamiento 2027')
+  AND EXISTS (SELECT 1 FROM empresas)
+  AND EXISTS (SELECT 1 FROM prioridades);
