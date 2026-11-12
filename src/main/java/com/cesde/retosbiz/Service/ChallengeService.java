@@ -64,8 +64,7 @@ public class ChallengeService {
             throw new IllegalArgumentException("El reto es obligatorio");
         }
         validate(challenge.name(), challenge.description(), challenge.startDate(),
-                challenge.endDate(), challenge.status(), challenge.companyId(),
-                challenge.categoryId(), challenge.priorityId());
+                challenge.endDate(), challenge.status(), challenge.companyId());
     }
 
     private void validate(UpdateChallengeDto challenge) {
@@ -73,13 +72,14 @@ public class ChallengeService {
             throw new IllegalArgumentException("El reto es obligatorio");
         }
         validate(challenge.name(), challenge.description(), challenge.startDate(),
-                challenge.endDate(), challenge.status(), challenge.companyId(),
-                challenge.categoryId(), challenge.priorityId());
+                challenge.endDate(), challenge.status(), challenge.companyId());
+        validateRequiredId(challenge.categoryId(), "categoría");
+        validateRequiredId(challenge.priorityId(), "prioridad");
     }
 
     // Lanza IllegalArgumentException (400) si algún dato no es válido
     private void validate(String name, String description, LocalDate startDate, LocalDate endDate,
-                          String status, String companyId, String categoryId, String priorityId) {
+                        String status, String companyId) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("El nombre es obligatorio");
         }
@@ -100,8 +100,6 @@ public class ChallengeService {
             throw new IllegalArgumentException("El estado no puede exceder los 50 caracteres");
         }
         validateRequiredId(companyId, "empresa");
-        validateRequiredId(categoryId, "categoría");
-        validateRequiredId(priorityId, "prioridad");
     }
 
     private void validateRequiredId(String id, String field) {
