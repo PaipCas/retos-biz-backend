@@ -1,10 +1,15 @@
 package com.cesde.retosbiz.Model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -31,8 +36,12 @@ public class CompanyModel {
     @Column(name = "sector_empresa")
     private String sector;
 
-    // Getters and Setters
+    // Relación Uno a Muchos con Reto (Una empresa puede tener muchos retos)
+    @OneToMany(mappedBy = "empresa")
+    @JsonManagedReference
+    private List<ChallengeModel> retos;
 
+    // Getters and Setters
     public String getId() {
         return id;
     }
