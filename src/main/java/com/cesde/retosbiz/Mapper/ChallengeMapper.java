@@ -19,8 +19,6 @@ public interface ChallengeMapper {
     @Mapping(source = "fechaFin", target = "endDate")
     @Mapping(source = "estado", target = "status")
     @Mapping(source = "idEmpresa", target = "companyId")
-    @Mapping(source = "idCategoria", target = "categoryId")
-    @Mapping(source = "idPrioridad", target = "priorityId")
     ChallengeDto toChallengeDto(ChallengeModel challengeModel);
 
     List<ChallengeDto> toChallengeDto(Iterable<ChallengeModel> challengeModels);
@@ -34,8 +32,6 @@ public interface ChallengeMapper {
     @Mapping(source = "endDate", target = "fechaFin")
     @Mapping(source = "status", target = "estado")
     @Mapping(source = "companyId", target = "idEmpresa")
-    @Mapping(source = "categoryId", target = "idCategoria")
-    @Mapping(source = "priorityId", target = "idPrioridad")
     @Mapping(target = "id", ignore = true)
     void updateChallengeModelFromDto(UpdateChallengeDto updateChallengeDto,
         @MappingTarget ChallengeModel challengeModel);

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.cesde.retosbiz.Crud.CategoryCrud;
 import com.cesde.retosbiz.Dto.CategoryDto;
 import com.cesde.retosbiz.Dto.UpdateCategoryDto;
-import com.cesde.retosbiz.Exception.CategoryAlreadyExistException;
 import com.cesde.retosbiz.Mapper.CategoryMapper;
 import com.cesde.retosbiz.Model.CategoryModel;
 
@@ -28,30 +27,31 @@ public class CategoryModelRepository implements CategoryRepository {
 
 	@Override
 	public CategoryDto getCategoryById(String id) {
-		CategoryModel categoryModel = this.categoryCrud.findById(id).orElse(null);
-		return this.categoryMapper.toCategoryDto(categoryModel);
+		return this.categoryCrud.findById(id).map(this.categoryMapper::toCategoryDto).orElse(null);
 	}
 
 	@Override
 	public CategoryDto createCategory(CategoryDto categoryDto) {
-		if (this.categoryCrud.findFirstByNombre(categoryDto.name()) != null){
-			throw new CategoryAlreadyExistException(categoryDto.name());
-		}
-
 		CategoryModel categoryModel = this.categoryMapper.toCategoryModel(categoryDto);
-
 		return this.categoryMapper.toCategoryDto(this.categoryCrud.save(categoryModel));
 	}
 
 	@Override
 	public CategoryDto updateCategory(String id, UpdateCategoryDto updateCategoryDto) {
-		CategoryModel categoryModel = this.categoryCrud.findById(id).orElse(null);
-		
-		if (categoryModel == null)
-			return null;
-
+		CategoryModel categoryModel = this.categoryCrud.findById(id).orElseThrow();
 		this.categoryMapper.updateCategoryModelFromDto(updateCategoryDto, categoryModel);
+		
 		return this.categoryMapper.toCategoryDto(this.categoryCrud.save(categoryModel));
+	}
+
+	@Override
+	public boolean existsByName(String name) {
+		return this.categoryCrud.findFirstByNombre(name) != null;
+	}
+
+	@Override
+	public boolean existsById(String id) {
+		return this.categoryCrud.existsById(id);
 	}
 
 	@Override

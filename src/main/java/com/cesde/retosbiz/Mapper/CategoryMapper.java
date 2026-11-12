@@ -17,11 +17,13 @@ public interface CategoryMapper {
 	@Mapping(source = "descripcion", target = "description")
 	@Mapping(source = "area_responsable", target = "responsible_area")
 	CategoryDto toCategoryDto(CategoryModel categoryModel);
+
 	List<CategoryDto> toCategoryDto(Iterable<CategoryModel> categoryModels);
 
 	@InheritInverseConfiguration
 	CategoryModel toCategoryModel(CategoryDto categoryDto);
 
+	@Mapping(target = "id", ignore = true)
 	@Mapping(source = "name", target = "nombre")
 	@Mapping(source = "description", target = "descripcion")
 	@Mapping(source = "responsible_area", target = "area_responsable")
