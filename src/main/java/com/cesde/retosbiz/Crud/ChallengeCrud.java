@@ -8,5 +8,7 @@ import com.cesde.retosbiz.Model.ChallengeModel;
 
 public interface ChallengeCrud extends CrudRepository<ChallengeModel, String> {
     List<ChallengeModel> findByEstado(String estado);
-    List<ChallengeModel> findByIdEmpresa(String idEmpresa);
+
+    // Busca por el id de la empresa (empresa.id)
+    List<ChallengeModel> findByEmpresa_Id(String companyId);
 }

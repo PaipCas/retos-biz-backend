@@ -43,9 +43,12 @@ public class ChallengeModel {
     @Schema(description = "Estado actual del reto", example = "En progreso")
     private String estado;
 
-    @Column(name = "id_empresa", nullable = false, length = 50)
-    @Schema(description = "Identificador de la empresa asociada al reto", example = "empresa-123")
-    private String idEmpresa;
+    // Relación Muchos a Uno con Empresa (muchos retos pueden pertenecer a una empresa)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_empresa", nullable = false)
+    @JsonBackReference
+    @Schema(description = "Empresa asociada al reto")
+    private CompanyModel empresa;
 
     // Relación Muchos a Uno con Categoría (muchos retos pueden pertenecer a una categoría)
     @ManyToOne
@@ -110,11 +113,27 @@ public class ChallengeModel {
         this.estado = estado;
     }
 
-    public String getIdEmpresa() {
-        return idEmpresa;
+    public CompanyModel getEmpresa() {
+        return empresa;
     }
 
-    public void setIdEmpresa(String idEmpresa) {
-        this.idEmpresa = idEmpresa;
+    public void setEmpresa(CompanyModel empresa) {
+        this.empresa = empresa;
+    }
+
+    public CategoryModel getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(CategoryModel categoria) {
+        this.categoria = categoria;
+    }
+
+    public PriorityModel getPrioridad() {
+        return prioridad;
+    }
+
+    public void setPrioridad(PriorityModel prioridad) {
+        this.prioridad = prioridad;
     }
 }

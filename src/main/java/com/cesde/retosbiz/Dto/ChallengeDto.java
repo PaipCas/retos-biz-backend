@@ -19,5 +19,11 @@ public record ChallengeDto(
         String status,
         @NotBlank(message = "La empresa es obligatoria")
         @Size(max = 50, message = "El ID de empresa no puede exceder los 50 caracteres")
-        String companyId) {
+        String companyId,
+        @NotBlank(message = "La categoría es obligatoria")
+        @Size(max = 50, message = "El ID de categoría no puede exceder los 50 caracteres")
+        String categoryId,
+        @NotBlank(message = "La prioridad es obligatoria")
+        @Size(max = 50, message = "El ID de prioridad no puede exceder los 50 caracteres")
+        String priorityId) {
 }
