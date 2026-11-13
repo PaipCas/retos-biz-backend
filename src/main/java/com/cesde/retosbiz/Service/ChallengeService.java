@@ -2,6 +2,7 @@ package com.cesde.retosbiz.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 
@@ -21,89 +22,92 @@ public class ChallengeService {
         this.challengeRepository = challengeRepository;
     }
 
-    public List<ChallengeDto> getAll() {
-        return challengeRepository.getAll();
+    public List<ChallengeDto> getAllChallenges() {
+        return this.challengeRepository.getAll();
     }
 
-    public ChallengeDto getById(String id) throws Exception {
-        ChallengeDto challenge = challengeRepository.getById(id);
+    // Lanza NoSuchElementException (404) si el reto no existe
+    public ChallengeDto getChallengeById(String id) {
+        ChallengeDto challenge = this.challengeRepository.getById(id);
         if (challenge == null) {
-            throw new Exception("Reto no encontrado");
+            throw new NoSuchElementException("Reto no encontrado");
         }
         return challenge;
     }
 
-    public List<ChallengeDto> getByEstado(String estado) {
-        return challengeRepository.getByEstado(estado);
+    public List<ChallengeDto> getChallengesByStatus(String status) {
+        return this.challengeRepository.getByEstado(status);
     }
 
-    public List<ChallengeDto> getByCompanyId(String companyId) {
-        return challengeRepository.getByCompanyId(companyId);
+    public List<ChallengeDto> getChallengesByCompanyId(String companyId) {
+        return this.challengeRepository.getByCompanyId(companyId);
     }
 
-    public ChallengeDto create(ChallengeDto challenge) throws Exception {
-        validate(challenge);
-        return challengeRepository.create(challenge);
+    public ChallengeDto createChallenge(ChallengeDto challengeDto) {
+        validate(challengeDto);
+        return this.challengeRepository.create(challengeDto);
     }
 
-    public ChallengeDto update(String id, UpdateChallengeDto challenge) throws Exception {
-        getById(id);
-        validate(challenge);
-        return challengeRepository.update(id, challenge);
+    public ChallengeDto updateChallenge(String id, UpdateChallengeDto updateChallengeDto) {
+        getChallengeById(id);
+        validate(updateChallengeDto);
+        return this.challengeRepository.update(id, updateChallengeDto);
     }
 
-    public void delete(String id) throws Exception {
-        getById(id);
-        challengeRepository.delete(id);
+    public void deleteChallenge(String id) {
+        getChallengeById(id);
+        this.challengeRepository.delete(id);
     }
 
-    private void validate(ChallengeDto challenge) throws Exception {
+    private void validate(ChallengeDto challenge) {
         if (challenge == null) {
-            throw new Exception("El reto es obligatorio");
+            throw new IllegalArgumentException("El reto es obligatorio");
         }
         validate(challenge.name(), challenge.description(), challenge.startDate(),
                 challenge.endDate(), challenge.status(), challenge.companyId());
     }
 
-    private void validate(UpdateChallengeDto challenge) throws Exception {
+    private void validate(UpdateChallengeDto challenge) {
         if (challenge == null) {
-            throw new Exception("El reto es obligatorio");
+            throw new IllegalArgumentException("El reto es obligatorio");
         }
         validate(challenge.name(), challenge.description(), challenge.startDate(),
                 challenge.endDate(), challenge.status(), challenge.companyId());
+        validateRequiredId(challenge.categoryId(), "categoría");
+        validateRequiredId(challenge.priorityId(), "prioridad");
     }
 
+    // Lanza IllegalArgumentException (400) si algún dato no es válido
     private void validate(String name, String description, LocalDate startDate, LocalDate endDate,
-                          String status, String companyId)
-            throws Exception {
+                        String status, String companyId) {
         if (name == null || name.isBlank()) {
-            throw new Exception("El nombre es obligatorio");
+            throw new IllegalArgumentException("El nombre es obligatorio");
         }
         if (name.length() > 150) {
-            throw new Exception("El nombre no puede exceder los 150 caracteres");
+            throw new IllegalArgumentException("El nombre no puede exceder los 150 caracteres");
         }
         if (description != null && description.length() > 500) {
-            throw new Exception("La descripción no puede exceder los 500 caracteres");
+            throw new IllegalArgumentException("La descripción no puede exceder los 500 caracteres");
         }
         if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
-            throw new Exception("La fecha fin no puede ser anterior a la fecha inicio");
+            throw new IllegalArgumentException("La fecha fin no puede ser anterior a la fecha inicio");
         }
         if (status == null || !ESTADOS.contains(status.trim().toLowerCase())) {
-            throw new Exception(
+            throw new IllegalArgumentException(
                     "Estado no válido. Use: En progreso, Completado, Pendiente o Cancelado");
         }
         if (status.length() > 50) {
-            throw new Exception("El estado no puede exceder los 50 caracteres");
+            throw new IllegalArgumentException("El estado no puede exceder los 50 caracteres");
         }
         validateRequiredId(companyId, "empresa");
     }
 
-    private void validateRequiredId(String id, String field) throws Exception {
+    private void validateRequiredId(String id, String field) {
         if (id == null || id.isBlank()) {
-            throw new Exception("El ID de " + field + " es obligatorio");
+            throw new IllegalArgumentException("El ID de " + field + " es obligatorio");
         }
         if (id.length() > 50) {
-            throw new Exception("El ID de " + field + " no puede exceder los 50 caracteres");
+            throw new IllegalArgumentException("El ID de " + field + " no puede exceder los 50 caracteres");
         }
     }
 }

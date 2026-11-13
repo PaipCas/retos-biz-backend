@@ -3,6 +3,7 @@ package com.cesde.retosbiz.Model;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,37 +16,49 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "retos")
+@Schema(name = "ChallengeModel", description = "Modelo que representa un reto")
 public class ChallengeModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Schema(description = "Identificador único del reto", example = "a1b2c3d4-e5f6-7890-abcd-ef1234567890")
     private String id;
 
     @Column(nullable = false, length = 150)
+    @Schema(description = "Nombre del reto", example = "Crear una aplicación web")
     private String nombre;
 
     @Column(length = 500)
+    @Schema(description = "Descripción detallada del reto", example = "Diseñar e implementar una aplicación para resolver un problema")
     private String descripcion;
 
     @Column(name = "fecha_inicio")
+    @Schema(description = "Fecha de inicio del reto", example = "2026-01-15")
     private LocalDate fechaInicio;
 
     @Column(name = "fecha_fin")
+    @Schema(description = "Fecha de finalización del reto", example = "2026-03-30")
     private LocalDate fechaFin;
 
     @Column(length = 50)
+    @Schema(description = "Estado actual del reto", example = "En progreso")
     private String estado;
 
     @Column(name = "id_empresa", nullable = false, length = 50)
+    @Schema(description = "Identificador de la empresa asociada al reto", example = "empresa-123")
     private String idEmpresa;
 
+    // Relación Muchos a Uno con Categoría (muchos retos pueden pertenecer a una categoría)
     @ManyToOne
     @JoinColumn(name = "id_categoria")
     @JsonBackReference
+    @Schema(description = "Categoría a la que pertenece el reto")
     private CategoryModel categoria;
 
+    // Relación Muchos a Uno con Prioridad (muchos retos pueden tener una prioridad)
     @ManyToOne
     @JoinColumn(name = "id_prioridad")
     @JsonBackReference
+    @Schema(description = "Prioridad asignada al reto")
     private PriorityModel prioridad;
 
     /// Getters and Setters

@@ -34,5 +34,5 @@ public interface ChallengeMapper {
     @Mapping(source = "companyId", target = "idEmpresa")
     @Mapping(target = "id", ignore = true)
     void updateChallengeModelFromDto(UpdateChallengeDto updateChallengeDto,
-                                     @MappingTarget ChallengeModel challengeModel);
+        @MappingTarget ChallengeModel challengeModel);
 }
